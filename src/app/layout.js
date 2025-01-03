@@ -2,7 +2,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import ThemeCompo from "./components/ThemeCompo";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "next-themes"; 
+import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeModeScript } from "flowbite-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,17 +23,23 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider>
-          <ThemeCompo>
-            <Header />
-            {children}
-          </ThemeCompo>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        {/* cannot descent of button hydration */}
+        <head>
+          <ThemeModeScript />
+        </head>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <ThemeProvider>
+            <ThemeCompo>
+              <Header />
+              {children}
+            </ThemeCompo>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
