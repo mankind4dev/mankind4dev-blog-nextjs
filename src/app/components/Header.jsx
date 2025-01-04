@@ -66,6 +66,7 @@ export default function Header() {
           {theme === "light" ? <FaSun /> : <FaMoon />}
         </Button>
         <SignedIn>
+          {/* to make the popup respond to the dark theme */}
           <UserButton
             appearance={{
               baseTheme: theme === 'light' ? light : dark,
