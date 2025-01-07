@@ -86,7 +86,6 @@ export async function POST(req) {
               isAdmin: user.isAdmin,
             },
           });
-          console.log("User metadata updated successfully");
         } catch (error) {
           console.log("Error updating user metadata:", error);
         }
