@@ -1,49 +1,41 @@
-import Post from "@/lib/models/post.model";
-import { connect } from "@/lib/mongodb/mongoose";
+import User from '../../../../lib/models/user.model';
+import { connect } from '../../../../lib/mongodb/mongoose';
+import { currentUser } from '@clerk/nextjs/server';
 
 export const POST = async (req) => {
-  await connect();
-  const data = await req.json();
+  const user = await currentUser();
+
   try {
+    await connect();
+    const data = await req.json();
+
+    if (!user.publicMetadata.isAdmin) {
+      return new Response('Unauthorized', { status: 401 });
+    }
+
     const startIndex = parseInt(data.startIndex) || 0;
     const limit = parseInt(data.limit) || 9;
-    const sortDirection = data.order === 'asc' ? 1 : -1;
-    const posts = await Post.find({
-      ...(data.userId && { userId: data.userId }),
-      ...(data.category &&
-        data.category !== 'null' &&
-        data.category !== 'undefined' && { category: data.category }),
-      ...(data.slug && { slug: data.slug }),
-      ...(data.postId && { _id: data.postId }),
-      ...(data.searchTerm && {
-        $or: [
-          { title: { $regex: data.searchTerm, $options: 'i' } },
-          { content: { $regex: data.searchTerm, $options: 'i' } },
-        ],
-      }),
-    })
-      .sort({ updatedAt: sortDirection })
+    const sortDirection = data.sort === 'asc' ? 1 : -1;
+    const users = await User.find()
+      .sort({ createdAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
 
-    const totalPosts = await Post.countDocuments();
-
+    const totalUsers = await User.countDocuments();
     const now = new Date();
-
     const oneMonthAgo = new Date(
       now.getFullYear(),
       now.getMonth() - 1,
       now.getDate()
     );
-
-    const lastMonthPosts = await Post.countDocuments({
+    const lastMonthUsers = await User.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
-
-    return new Response(JSON.stringify({ posts, totalPosts, lastMonthPosts }), {
+    return new Response(JSON.stringify({ users, totalUsers, lastMonthUsers }), {
       status: 200,
     });
   } catch (error) {
-    console.log('Error getting posts:', error);
+    console.log('Error getting the users :', error);
+    return new Response('Error getting the users', { status: 500 });
   }
 };
