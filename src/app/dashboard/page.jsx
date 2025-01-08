@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import DashPosts from "../components/DashPosts";
 import DashUsers from "../components/DashUsers";
 import DashboardComp from "../components/DashboardComp";
+import CreatePostPage from "./create-post/page";
 export default function Dashboard() {
   const searchParams = useSearchParams();
   const [tab, setTab] = useState("");
@@ -28,6 +29,7 @@ export default function Dashboard() {
         {tab === "profile" && <DashProfile />}
 
         {tab === "posts" && <DashPosts />}
+        {tab === "create-poat" && <CreatePostPage />}
 
         {tab === "users" && <DashUsers />}
         {tab === "dash" && <DashboardComp />}
