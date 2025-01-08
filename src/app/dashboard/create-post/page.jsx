@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
+import { Alert, Button, FileInput, Select, Spinner, TextInput } from "flowbite-react";
 
 import dynamic from "next/dynamic";
 import { useState } from "react";
@@ -24,7 +24,7 @@ import DashSidebar from "@/app/components/DashSidebar";
 
 export default function CreatePostPage() {
   const { isSignedIn, user, isLoaded } = useUser();
-
+const [loading, setLoading] = useState(false)
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
@@ -104,11 +104,11 @@ export default function CreatePostPage() {
     return (
       <>
         <div className="flex w-full">
-          <div className="md:w-56">
+          <div className="hidden md:flex md:w-56">
             <DashSidebar />
           </div>
-          <div className="p-3 max-w-full mx-auto min-h-screen">
-            <h1 className="text-center text-3xl font-semibold">
+          <div className="p-3 w-full mx-auto min-h-screen">
+            <h1 className="text-center text-3xl my-3 font-semibold">
               Create a post
             </h1>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -177,14 +177,21 @@ export default function CreatePostPage() {
               <ReactQuill
                 theme="snow"
                 placeholder="Write something..."
-                className="h-72 mb-12"
+                className="h-72 w-full mb-12"
                 required
                 onChange={(value) => {
                   setFormData({ ...formData, content: value });
                 }}
               />
-              <Button type="submit" gradientDuoTone="purpleToPink">
-                Publish
+              <Button type="submit" disabled={loading} gradientDuoTone="purpleToPink">
+                {loading ? (
+                  <>
+                    <p className="ml-2">Loading</p>
+                    <Spinner size="sm" />
+                  </>
+                ) : (
+                  <p className="">Publish</p>
+                )}
               </Button>
             </form>
           </div>

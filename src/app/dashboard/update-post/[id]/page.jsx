@@ -1,7 +1,7 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
-import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
+import { Alert, Button, FileInput, Select, Spinner, TextInput } from 'flowbite-react';
 import dynamic from 'next/dynamic';
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 // https://dev.to/a7u/reactquill-with-nextjs-478b
@@ -21,6 +21,7 @@ import { useRouter, usePathname } from 'next/navigation';
 
 export default function UpdatePost() {
   const { isSignedIn, user, isLoaded } = useUser();
+  const [loading, setLoading] = useState(false)
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
@@ -204,8 +205,15 @@ export default function UpdatePost() {
               setFormData({ ...formData, content: value });
             }}
           />
-          <Button type='submit' gradientDuoTone='purpleToPink'>
-            Update
+          <Button type='submit' disabled={loading} gradientDuoTone='purpleToPink'>
+            {loading ? (
+                <>
+                <p className="ml-2">Loading</p>
+                <Spinner size='sm' />
+                </>
+            ) : (
+                <p className="">Update</p>
+            )}
           </Button>
           {publishError && (
             <Alert className='mt-5' color='failure'>
