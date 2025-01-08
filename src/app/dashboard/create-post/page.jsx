@@ -1,7 +1,14 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { Alert, Button, FileInput, Select, Spinner, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  FileInput,
+  Select,
+  Spinner,
+  TextInput,
+} from "flowbite-react";
 
 import dynamic from "next/dynamic";
 import { useState } from "react";
@@ -24,7 +31,7 @@ import DashSidebar from "@/app/components/DashSidebar";
 
 export default function CreatePostPage() {
   const { isSignedIn, user, isLoaded } = useUser();
-const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
@@ -129,9 +136,25 @@ const [loading, setLoading] = useState(false)
                   }
                 >
                   <option value="uncategorized">Select a category</option>
+                  <option value="axios">Axios</option>
+                  <option value="clerk">Clerk</option>
+                  <option value="css">CSS</option>
+                  <option value="express">Express</option>
+                  <option value="flowbite">flowbite</option>
                   <option value="javascript">JavaScript</option>
+                  <option value="github">Github</option>
+                  <option value="html5">HTML5</option>
                   <option value="reactjs">React.js</option>
                   <option value="nextjs">Next.js</option>
+                  <option value="mongoDB">MongoDB</option>
+                  <option value="nodejs">Node.js</option>
+                  <option value="material UI">Material UI</option>
+                  <option value="react icons">React Icons</option>
+                  <option value="react redux">React Redux</option>
+                  <option value="redux">Redux</option>
+                  <option value="redux">Redux</option>
+                  <option value="tailwindcss">Tailwindcss</option>
+                  <option value="typescript">Typescript</option>
                 </Select>
               </div>
               <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
@@ -183,7 +206,11 @@ const [loading, setLoading] = useState(false)
                   setFormData({ ...formData, content: value });
                 }}
               />
-              <Button type="submit" disabled={loading} gradientDuoTone="purpleToPink">
+              <Button
+                type="submit"
+                disabled={loading}
+                gradientDuoTone="purpleToPink"
+              >
                 {loading ? (
                   <>
                     <p className="ml-2">Loading</p>
